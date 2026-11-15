@@ -1,0 +1,34 @@
+====================================================
+GOOGLE PLAY STORE LISTING DETAILS (COPY & PASTE)
+====================================================
+
+1. APP NAME (Max 30 chars):
+Sweet Saga: Match 3 Puzzle
+
+2. SHORT DESCRIPTION (Max 80 chars):
+Match 3 glossy candies, clear frosted jelly & blast combos across infinite levels!
+
+3. FULL DESCRIPTION:
+Dive into Sweet Saga, a vibrant and addictive Match-3 candy puzzle adventure! Swap, match, and crush colorful 3D candies across endless handcrafted and procedural levels.
+
+KEY FEATURES:
+- INFINITE SAGA LEVELS: Journey through endless episodes and unique board shapes with escalating challenges.
+- EXCITING OBJECTIVES: Clear frosted glass jelly tiles, drop cherries to the bottom, and collect target candies before you run out of moves.
+- SPECIAL CANDIES & MEGA COMBOS:
+  * Match 4 in a row for Striped Candies that clear entire rows or columns.
+  * Match in an L or T shape for Wrapped Candy explosions.
+  * Match 2x2 squares to summon Swedish Fish that swim straight to target jelly tiles.
+  * Match 5 in a line to create a Color Bomb, and combine any two special candies for massive board-clearing blasts!
+- CHALLENGING BLOCKERS: Smash through multi-layer Ice, Licorice cages, and spreading Chocolate.
+- HELPFUL BOOSTERS & DAILY REWARDS: Use the Lollipop Hammer, Free Swap, Color Bomb, and +5 Extra Moves, plus claim daily login streaks.
+- PLAY OFFLINE ANYTIME: No internet connection required to play, with manual backup sync codes to transfer your progress.
+
+Download Sweet Saga now and start your sweet puzzle adventure!
+
+4. PACKAGE ID (For PWABuilder):
+com.shahid.sweetsaga
+
+5. DATA SAFETY ANSWERS (Play Console):
+- Does your app collect or share any of the required user data types? -> NO
+- Is all user data encrypted in transit? -> YES (HTTPS)
+- Do you provide a way for users to request that their data is deleted? -> YES (Local device storage cleared on uninstall)
