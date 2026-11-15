@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#24104d">
+<title>Candy Pop — Match 3</title>
+<style>
+:root{--ink:#fff;--gold:#ffe98a;--pink:#ff4f9a;--purple:#6e36c8;--panel:#32136b}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(ellipse at 50% -15%,#a94ee7 0,#54208f 38%,#1b0b42 85%);display:flex;justify-content:center;padding:12px 10px 25px;overflow-x:hidden}
+.app{width:min(100%,470px)}header{text-align:center;padding:6px 0 12px}h1{margin:0;font-size:clamp(30px,8vw,43px);font-weight:1000;letter-spacing:-1.5px;text-shadow:0 3px 0 #7c287f,0 6px 18px #120526}.logoCandy{filter:drop-shadow(0 4px 0 #7c287f)}.tag{font-size:10px;letter-spacing:3px;font-weight:900;color:#ffd8f0;opacity:.9}
+.topline{display:flex;justify-content:space-between;align-items:center;margin:0 3px 9px}.level{background:linear-gradient(135deg,#ffdf78,#ff9f38);color:#66265f;padding:7px 13px;border-radius:20px;font-weight:1000;box-shadow:0 3px 0 #b45b38}.sound{background:#ffffff20;border:1px solid #ffffff55;border-radius:50%;width:38px;height:38px;color:white;font-size:17px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}.stat{background:linear-gradient(180deg,#57269b,#36166f);border:1px solid #c48cff80;border-radius:16px;padding:8px 5px;text-align:center;box-shadow:0 4px 0 #1b0b45,inset 0 1px #ffffff30}.stat small{display:block;color:#e9cfff;font-size:10px;letter-spacing:1px;font-weight:900}.stat strong{font-size:23px;line-height:1.25;text-shadow:0 2px 0 #24104d}
+.goalbox{background:#fff1cf;color:#6b2867;border-radius:16px;padding:9px 12px;margin-bottom:10px;box-shadow:0 4px 0 #bb6e9a}.goalrow{display:flex;justify-content:space-between;font-weight:950;font-size:12px}.progress{height:10px;background:#e9c1d8;border-radius:20px;margin-top:7px;overflow:hidden;border:1px solid #fff}.bar{height:100%;width:0;background:linear-gradient(90deg,#ff4f9a,#ffbd47);border-radius:20px;transition:width .3s}
+.frame{padding:9px;border-radius:23px;background:linear-gradient(135deg,#ffdb8c,#f78ac4 45%,#9c67ff);box-shadow:0 8px 0 #21094e,0 15px 28px #10052580}.board{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;padding:7px;background:linear-gradient(145deg,#321064,#1d0b48);border-radius:16px;border:1px solid #ffffff55;touch-action:manipulation;user-select:none}
+.tile{aspect-ratio:1;min-width:0;position:relative;border:0;border-radius:11px;background:linear-gradient(145deg,#6733a2,#351365);box-shadow:inset 0 2px 3px #ffffff18,inset 0 -3px 0 #160635;display:grid;place-items:center;padding:2px;cursor:pointer;overflow:hidden}
+.candy{width:87%;height:87%;border-radius:32% 38% 34% 40%;display:grid;place-items:center;font-size:clamp(22px,6.5vw,33px);line-height:1;position:relative;filter:drop-shadow(0 3px 1px #13052688);text-shadow:0 2px 2px #31104d66;transition:transform .12s}
+.candy:before{content:"";position:absolute;top:9%;left:18%;width:29%;height:14%;border-radius:50%;background:#ffffff9c;transform:rotate(-28deg);filter:blur(.4px)}
+.tile.selected{outline:3px solid #fff3a0;outline-offset:-2px;background:#9a58d1;transform:scale(.94)}
+.tile.special .candy{box-shadow:0 0 0 3px #fff7a0,0 0 13px #ffe76a}
+.tile.boom{animation:pop .24s ease-out}
+@keyframes pop{50%{transform:scale(1.25);filter:brightness(1.8)}100%{transform:scale(.2);opacity:.1}}
+.tile.fall .candy{animation:drop .2s ease-out}@keyframes drop{from{transform:translateY(-22px);opacity:.4}to{transform:translateY(0);opacity:1}}
+.hint{animation:hint .55s infinite alternate}@keyframes hint{to{transform:scale(.85);filter:brightness(1.4)}}
+.message{height:29px;text-align:center;padding:7px 2px 0;font-weight:850;font-size:12px;color:#ffe6f6;text-shadow:0 1px 3px #19062d}
+.boosts{display:flex;gap:8px;margin-top:10px}.boost{flex:1;background:linear-gradient(180deg,#ffdc76,#ff9b43);color:#65255d;border:0;border-radius:14px;padding:9px 4px;font-size:12px;font-weight:1000;box-shadow:0 4px 0 #9e4c4b;cursor:pointer}.boost:disabled{opacity:.5}
+.bottom{display:flex;gap:8px;margin-top:10px}.btn{flex:1;border:0;border-radius:15px;padding:12px 8px;color:#fff;font-size:13px;font-weight:1000;background:linear-gradient(135deg,#ff559e,#d52c86);box-shadow:0 4px 0 #8e1b68;cursor:pointer}.btn.alt{background:linear-gradient(135deg,#55c8ff,#4777ed);box-shadow:0 4px 0 #2547a5}
+.hintline{text-align:center;color:#e6c9ff;font-size:10px;margin:12px 0 0}
+.overlay{position:fixed;inset:0;background:#14052dcc;display:none;align-items:center;justify-content:center;padding:20px;z-index:5}.modal{width:min(100%,330px);background:linear-gradient(160deg,#fff1c8,#ffd0ec);color:#64236b;border:4px solid white;border-radius:25px;padding:23px;text-align:center;box-shadow:0 15px 60px #080018}.modal h2{font-size:27px;margin:0 0 8px}.modal p{font-weight:800}.modal .btn{width:100%;margin-top:8px}
+@media(min-width:420px){.board{gap:5px;padding:9px}.tile{border-radius:13px}.candy{font-size:34px}}
+</style>
+</head>
+<body><main class="app">
+<header><h1><span class="logoCandy">🍬</span> CANDY POP <span class="logoCandy">🍭</span></h1><div class="tag">SWEET MATCH ADVENTURE</div></header>
+<div class="topline"><div class="level">⭐ LEVEL <span id="level">1</span></div><div style="font-size:11px;font-weight:900;color:#ffe3f4">🍓 COLLECT THE SWEETS!</div><button class="sound" id="sound" aria-label="Toggle sound">🔊</button></div>
+<section class="stats"><div class="stat"><small>YOUR SCORE</small><strong id="score">0</strong></div><div class="stat"><small>MOVES LEFT</small><strong id="moves">25</strong></div><div class="stat"><small>BEST SCORE</small><strong id="best">0</strong></div></section>
+<section class="goalbox"><div class="goalrow"><span>🎯 LEVEL TARGET</span><span><b id="target">1800</b> points</span></div><div class="progress"><div class="bar" id="bar"></div></div></section>
+<section class="frame"><div class="board" id="board"></div></section>
+<div class="message" id="message">Swap two sweets to match 3 or more!</div>
+<div class="boosts"><button class="boost" id="hammer">🔨 Hammer <span id="hcount">2</span></button><button class="boost" id="shuffle">🔀 Shuffle</button><button class="boost" id="hint">💡 Hint</button></div>
+<div class="bottom"><button class="btn" id="restart">↻ RESTART</button><button class="btn alt" id="next" disabled>NEXT LEVEL ➜</button></div>
+<p class="hintline">Match 4 = striped candy • Match 5 = rainbow candy • Special candies clear bigger areas!</p>
+</main>
+<div class="overlay" id="overlay"><div class="modal"><h2 id="endTitle">Sweet!</h2><p id="endText"></p><button class="btn" id="continue">LET'S PLAY!</button></div></div>
+<script>
+(()=>{
+const icons=['🍓','🍋','🍇','🍊','🍬','🫐'];const colors=['#ff4b77','#ffe05b','#a86bff','#ff9b3f','#ff77c8','#56c9ff'];
+const n=8,$=id=>document.getElementById(id);let g=[],sel=null,score=0,moves=25,level=1,best=0,hammer=2,locked=false,sound=true,won=false,usedHammer=false;
+try{best=+(localStorage.getItem('candyPopBest')||0);level=+(localStorage.getItem('candyPopLevel')||1)}catch(e){}
+$('best').textContent=best;
+function target(){return 1800+(level-1)*450}
+function rand(){return Math.floor(Math.random()*icons.length)}
+function newGrid(){g=Array.from({length:n},()=>Array(n));for(let r=0;r<n;r++)for(let c=0;c<n;c++){let v;do{v=rand()}while((c>1&&g[r][c-1].v===v&&g[r][c-2].v===v)||(r>1&&g[r-1][c].v===v&&g[r-2][c].v===v));g[r][c]={v,s:0}}}
+function render(){let b=$('board');b.innerHTML='';for(let r=0;r<n;r++)for(let c=0;c<n;c++){let cell=document.createElement('button'),o=g[r][c];cell.className='tile'+(sel&&sel.r===r&&sel.c===c?' selected':'')+(o.s?' special':'');let candy=document.createElement('span');candy.className='candy';candy.style.background=`radial-gradient(circle at 30% 23%,#ffffff 0 5%,${colors[o.v]} 22%,${colors[o.v]} 65%,#4b1b72 130%)`;candy.textContent=o.s===2?'🌈':o.s===1?'⚡':icons[o.v];cell.appendChild(candy);cell.addEventListener('click',()=>tap(r,c));b.appendChild(cell)}
+$('score').textContent=score;$('moves').textContent=moves;$('level').textContent=level;$('target').textContent=target();$('bar').style.width=Math.min(100,score/target()*100)+'%';$('best').textContent=best;$('hcount').textContent=hammer;$('hammer').disabled=hammer<=0||locked}
+function find(){let found=new Set(),rows=[];for(let r=0;r<n;r++){let c=0;while(c<n){let e=c+1;while(e<n&&g[r][e].v===g[r][c].v)e++;if(e-c>=3){let a=[];for(let k=c;k<e;k++){found.add(r*n+k);a.push(r*n+k)}rows.push({a,len:e-c})}c=e}}
+for(let c=0;c<n;c++){let r=0;while(r<n){let e=r+1;while(e<n&&g[e][c].v===g[r][c].v)e++;if(e-r>=3){let a=[];for(let k=r;k<e;k++){found.add(k*n+c);a.push(k*n+c)}rows.push({a,len:e-r})}r=e}}return {found,rows}}
+const wait=t=>new Promise(res=>setTimeout(res,t));
+function playTone(freq=520){if(!sound)return;try{let C=window.AudioContext||window.webkitAudioContext,ctx=new C(),o=ctx.createOscillator(),v=ctx.createGain();o.frequency.value=freq;o.type='sine';v.gain.setValueAtTime(.05,ctx.currentTime);v.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.13);o.connect(v);v.connect(ctx.destination);o.start();o.stop(ctx.currentTime+.14)}catch(e){}}
+async function resolve(){let info=find(),chain=0;while(info.found.size){chain++;let ids=[...info.found];let specials=[];for(let row of info.rows)if(row.len>=4){let id=row.a[Math.floor(row.a.length/2)];specials.push({id,s:row.len>=5?2:1})}
+let clear=new Set(ids);for(let id of ids){let r=Math.floor(id/n),c=id%n;if(g[r][c].s===2){for(let rr=0;rr<n;rr++)for(let cc=0;cc<n;cc++)clear.add(rr*n+cc)}else if(g[r][c].s===1){for(let k=0;k<n;k++){clear.add(r*n+k);clear.add(k*n+c)}}}
+for(let sp of specials)clear.delete(sp.id);
+score+=clear.size*60+(chain-1)*100;playTone(500+chain*100);
+let cells=[...$('board').children];for(let id of clear){cells[id]?.classList.add('boom')}
+await wait(190);
+for(let id of clear){let r=Math.floor(id/n),c=id%n;g[r][c]=null}
+for(let c=0;c<n;c++){let vals=[];for(let r=n-1;r>=0;r--)if(g[r][c])vals.push(g[r][c]);for(let r=n-1;r>=0;r--)g[r][c]=vals[n-1-r]||{v:rand(),s:0}}
+for(let sp of specials){let r=Math.floor(sp.id/n),c=sp.id%n;if(!g[r][c])g[r][c]={v:rand(),s:sp.s}}
+render();[...$('board').children].forEach(x=>x.classList.add('fall'));await wait(180);info=find()}
+if(score>best){best=score;try{localStorage.setItem('candyPopBest',best)}catch(e){}}render();if(score>=target()){won=true;$('next').disabled=false;show('🎉 LEVEL CLEARED!',`Fantastic! You scored ${score} points. Tap Next Level to continue.`)}else if(moves<=0){show('OUT OF MOVES!',`You scored ${score}. Try again and beat ${target()} points.`)}}
+function show(title,msg){$('endTitle').textContent=title;$('endText').textContent=msg;$('overlay').style.display='flex'}
+function adjacent(a,b){return Math.abs(a.r-b.r)+Math.abs(a.c-b.c)===1}
+async function tap(r,c){if(locked||won)return;let p={r,c};if(!sel){sel=p;render();return}if(sel.r===r&&sel.c===c){sel=null;render();return}if(!adjacent(sel,p)){sel=p;render();return}
+locked=true;let a=sel,b=p;sel=null;let t=g[a.r][a.c];g[a.r][a.c]=g[b.r][b.c];g[b.r][b.c]=t;render();await wait(90);
+if(!find().found.size&&!(g[a.r][a.c].s||g[b.r][b.c].s)){t=g[a.r][a.c];g[a.r][a.c]=g[b.r][b.c];g[b.r][b.c]=t;$('message').textContent='That swap did not make a match. Try again!'}else{moves--;$('message').textContent='Sweet combo! Keep it going!';await resolve()}
+render();locked=false;if(moves<=0&&!won)show('OUT OF MOVES!',`Your score: ${score}. Target: ${target()}.`)}
+function start(){score=0;moves=25;hammer=2;won=false;sel=null;locked=false;$('next').disabled=true;$('overlay').style.display='none';$('message').textContent='Swap two sweets to match 3 or more!';newGrid();render()}
+$('restart').onclick=start;$('continue').onclick=()=>{$('overlay').style.display='none'};$('next').onclick=()=>{if(!won)return;level++;try{localStorage.setItem('candyPopLevel',level)}catch(e){}start();$('message').textContent='New level! Bigger target, sweeter fun.'};
+$('hammer').onclick=async()=>{if(locked||hammer<=0||won)return;locked=true;hammer--;let r=Math.floor(Math.random()*n),c=Math.floor(Math.random()*n);g[r][c]=null;for(let rr=r;rr>=0;rr--)if(rr>0)g[rr][c]=g[rr-1][c];g[0][c]={v:rand(),s:0};score+=100;render();await resolve();locked=false};
+$('shuffle').onclick=()=>{if(locked||won)return;newGrid();sel=null;$('message').textContent='Board shuffled! Find a big combo.';render()};
+$('hint').onclick=()=>{if(locked||won)return;let found=false;for(let r=0;r<n&&!found;r++)for(let c=0;c<n&&!found;c++){for(let [dr,dc] of [[0,1],[1,0]]){let rr=r+dr,cc=c+dc;if(rr>=n||cc>=n)continue;let t=g[r][c];g[r][c]=g[rr][cc];g[rr][cc]=t;if(find().found.size){sel={r,c};found=true;break}g[rr][cc]=g[r][c];g[r][c]=t}}render();if(found){let idx=sel.r*n+sel.c;$('board').children[idx]?.classList.add('hint');$('message').textContent='Try swapping the glowing candy!'}else $('message').textContent='No easy move found — shuffle the board.'};
+$('sound').onclick=()=>{sound=!sound;$('sound').textContent=sound?'🔊':'🔇';if(sound)playTone()};
+start();
+})();
+</script></body></html>
